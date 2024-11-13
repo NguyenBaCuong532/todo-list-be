@@ -1,14 +1,11 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './type-orm/entities/User.entity';
-import { Todo } from './type-orm/entities/Todo.entity';
-import { UsersService } from './users/services/users/users.service';
-import { UsersController } from './users/controllers/users/users.controller';
 import { UsersModule } from './users/users.module';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-
+import { User } from './type-orm/entities/user.entity';
+import { Todo } from './type-orm/entities/Todo.entity';
 @Module({
   imports: [
     // TypeOrmModule.forRoot(
@@ -29,11 +26,12 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         username: configService.get('USERNAME'),
         password: configService.get('PASSWORD'),
         database: configService.get('NAME_DB'),
-      entities:[User,Todo],
-      synchronize:true
-      })
-    }
-  ), UsersModule],
+        entities: [User, Todo],
+        synchronize: true,
+      }),
+    }),
+    UsersModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
