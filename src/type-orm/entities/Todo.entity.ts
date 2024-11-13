@@ -2,7 +2,7 @@ import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({name:'todo'})
 export class Todo{
-    @PrimaryGeneratedColumn({type:'bigint'})
+    @PrimaryGeneratedColumn()
     id:number;
 
     @Column()
