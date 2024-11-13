@@ -5,7 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { User } from './type-orm/entities/user.entity';
-import { Todo } from './type-orm/entities/Todo.entity';
+import { Todo } from './type-orm/entities/todo.entity';
 @Module({
   imports: [
     // TypeOrmModule.forRoot(
