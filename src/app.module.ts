@@ -1,38 +1,23 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { DatabaseModule } from './database/database.module';
 import { UsersModule } from './users/users.module';
-import { User } from './type-orm/entities/user.entity';
-import { Todo } from './type-orm/entities/todo.entity';
+import { ConfigModule } from '@nestjs/config';
+import * as Joi from 'joi';
 @Module({
   imports: [
-    // TypeOrmModule.forRoot(
-    // {
-    //   type:'mysql',
-    //   host:'localhost',
-    //   port:3306,
-    //   username:'root',
-    //   password:'root',
-    //   database:'todo_list',
-    TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        type: 'mysql',
-        host: configService.get('HOST'),
-        port: +configService.get('PORT'),
-        username: configService.get('USERNAME'),
-        password: configService.get('PASSWORD'),
-        database: configService.get('NAME_DB'),
-        entities: [User, Todo],
-        synchronize: true,
+    ConfigModule.forRoot({
+      validationSchema: Joi.object({
+        HOST:Joi.string().required(),
+        PORT:Joi.number().required(),
+        DB_USERNAME:Joi.string().required(),
+        DB_PASSWORD:Joi.string().required(),
+        NAME_DB:Joi.string().required(),
+
       }),
     }),
+    DatabaseModule,
     UsersModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  providers: [],
 })
 export class AppModule {}
