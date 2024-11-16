@@ -23,7 +23,6 @@ export class AuthController {
   @UseGuards(LocalGuard)
   @Get('logout')
   async logout(@Res() res: Response) {
-    console.log(res);
     if (!res.cookie)
       throw new HttpException('cookie is valid', HttpStatus.BAD_REQUEST);
     this.authService.logout(res);
