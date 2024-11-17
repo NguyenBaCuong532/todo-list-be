@@ -1,6 +1,6 @@
 import * as bcrypt from 'bcrypt';
 
-export async function EncodePass(password: string) {
+export async function encodePass(password: string) {
   const salt = bcrypt.genSaltSync();
   return bcrypt.hashSync(password, salt);
 }

@@ -1,14 +1,17 @@
+import { ConfigService } from '@nestjs/config';
 import { Injectable, Res } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import ms from 'ms';
 import { Response } from 'express';
 import { UsersService } from 'src/users/services/users.service';
 import { compareSync } from 'bcrypt';
+import { User } from 'src/type-orm/entities/user.entity';
 @Injectable()
 export class AuthService {
   constructor(
     private jwtService: JwtService,
     private userService: UsersService,
+    private readonly configService: ConfigService,
   ) {}
 
   async validateUser(username: string, pass: string) {
@@ -20,9 +23,8 @@ export class AuthService {
     return null;
   }
 
-  async login(user, @Res() res: Response) {
+  async login(user: User, @Res() res: Response) {
     const payload = { username: user, idUser: user.id };
-    console.log(payload);
     const expires = new Date();
     const token = this.jwtService.sign(payload);
     expires.setMilliseconds(expires.getMilliseconds() + ms('1h'));
@@ -30,6 +32,11 @@ export class AuthService {
       expires: expires,
       httpOnly: true,
       secure: false,
+      maxAge: ms(
+        String(
+          this.configService.getOrThrow('JWT_ACCESS_TOKEN_EXPIRATION_TIME'),
+        ),
+      ),
     });
     return { token };
   }

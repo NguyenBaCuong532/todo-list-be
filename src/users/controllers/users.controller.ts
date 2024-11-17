@@ -1,15 +1,6 @@
-import { CreateUserDto } from './../../dto/createuser.dto';
-import {
-  Body,
-  Controller,
-  Get,
-  Post,
-  Req,
-  UseGuards,
-  ValidationPipe,
-} from '@nestjs/common';
-import { UsersService } from '../services/users.service';
+import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 import { JwtGuard } from 'src/auth/guard/jwt.guard';
+import { UsersService } from '../services/users.service';
 
 @Controller('users')
 export class UsersController {
@@ -17,13 +8,7 @@ export class UsersController {
 
   @UseGuards(JwtGuard)
   @Get()
-  checkLogin(@Req() req) {
-    console.log(req.user.username);
+  getUser(@Req() req) {
     return req.user;
-  }
-
-  @Post('create')
-  createUser(@Body(ValidationPipe) dataUser: CreateUserDto) {
-    return this.userService.createUser(dataUser);
   }
 }

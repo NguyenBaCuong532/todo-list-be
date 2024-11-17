@@ -1,5 +1,5 @@
-import { AuthService } from './auth.service';
 import {
+  Body,
   Controller,
   Get,
   HttpException,
@@ -8,16 +8,32 @@ import {
   Req,
   Res,
   UseGuards,
+  ValidationPipe,
 } from '@nestjs/common';
-import { Request, Response } from 'express';
+import { Response } from 'express';
+import { AuthService } from './auth.service';
 import { LocalGuard } from './guard/local.guard';
+import RequestWithUser from './interfaces/requestUser.interface';
+import { CreateUserDto } from 'src/dto/createuser.dto';
+import { UsersService } from 'src/users/services/users.service';
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly userService: UsersService,
+  ) {}
   @UseGuards(LocalGuard)
   @Post('login')
-  async login(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
+  async login(
+    @Req() req: RequestWithUser,
+    @Res({ passthrough: true }) res: Response,
+  ) {
     return this.authService.login(req.user, res);
+  }
+
+  @Post('signup')
+  signup(@Body(ValidationPipe) dataUser: CreateUserDto) {
+    return this.userService.createUser(dataUser);
   }
 
   @UseGuards(LocalGuard)
