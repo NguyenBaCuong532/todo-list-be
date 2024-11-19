@@ -1,10 +1,4 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  OneToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Todo } from './todo.entity';
 
 @Entity({ name: 'users' })
@@ -26,7 +20,6 @@ export class User {
   @Column({ default: 0 })
   role: string;
 
-  @OneToOne(() => Todo)
-  @JoinColumn()
-  todo: Todo;
+  @OneToMany(() => Todo, (todo) => todo.user)
+  todos: Todo[];
 }
