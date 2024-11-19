@@ -35,6 +35,11 @@ export class UsersService {
       },
     });
   }
+  async getAllTodo() {
+    // return this.todoRepository.find({ relations: ['user'] });
+    return this.todoRepository.find();
+
+  }
 
   async createTodo(id: number, createTodo: CreateTodoDto) {
     const user = await this.userRepository.findOneBy({ id });

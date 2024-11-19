@@ -9,7 +9,7 @@ export class Todo {
   @Column()
   items: string;
 
-  @Column()
+  @Column({ default: false })
   checked: boolean;
 
   @ManyToOne(() => User, (user) => user.todos)

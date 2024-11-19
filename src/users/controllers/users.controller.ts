@@ -24,6 +24,10 @@ export class UsersController {
   getUser(@Req() req) {
     return req.user;
   }
+  @Get('todo')
+  async getAllTodo() {
+    return this.userService.getAllTodo();
+  }
 
   @Post(':id/todo')
   createTodo(
