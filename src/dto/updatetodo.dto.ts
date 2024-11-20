@@ -1,4 +1,8 @@
+import { IsNotEmpty } from 'class-validator';
+
 export class UpdateTodoDto {
-  items: string;
+  @IsNotEmpty({ message: 'item is not empty' })
+  item: string;
+
   checked: boolean;
 }

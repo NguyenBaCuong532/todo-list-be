@@ -24,7 +24,8 @@ export class AuthService {
   }
 
   async login(user: User, @Res() res: Response) {
-    const payload = { username: user, idUser: user.id };
+    const payload = { ...user };
+    delete payload.password;
     const expires = new Date();
     const token = this.jwtService.sign(payload);
     expires.setMilliseconds(expires.getMilliseconds() + ms('1h'));

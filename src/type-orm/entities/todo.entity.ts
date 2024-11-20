@@ -7,7 +7,7 @@ export class Todo {
   id: number;
 
   @Column()
-  items: string;
+  item: string;
 
   @Column({ default: false })
   checked: boolean;
