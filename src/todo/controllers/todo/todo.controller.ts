@@ -7,6 +7,7 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Query,
   Req,
   UseGuards,
   ValidationPipe,
@@ -21,9 +22,9 @@ import { TodoService } from 'src/todo/services/todo/todo.service';
 export class TodoController {
   constructor(private readonly todoService: TodoService) {}
   @UseGuards(JwtGuard)
-  @Get('me')
-  async getAllTodo() {
-    return this.todoService.getAllTodo();
+  @Get(':id/me')
+  async getAllTodo(@Param('id', ParseIntPipe) userId: number) {
+    return this.todoService.getAllTodo(userId);
   }
 
   @UseGuards(JwtGuard)
@@ -49,5 +50,11 @@ export class TodoController {
   @Delete(':id/item')
   async deleteTodo(@Param('id', ParseIntPipe) id: number) {
     return this.todoService.deleteTodo(id);
+  }
+  // @UseGuards(JwtGuard)
+  @Get('/:id/search')
+  async searchTodos(@Param('id') userId: number, @Query('q') search: string) {
+    console.log({ search });
+    return this.todoService.searchTodos(userId, search);
   }
 }

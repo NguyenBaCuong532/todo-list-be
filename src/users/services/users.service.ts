@@ -12,7 +12,11 @@ export class UsersService {
   ) {}
   async createUser(createUserDetail: CreateUserDto) {
     const password = await encodePass(createUserDetail.password);
-    if (createUserDetail.username)
+    const usernameOld = await this.userRepository.findOne({
+      where: { username: createUserDetail.username },
+    });
+    console.log(usernameOld);
+    if (usernameOld)
       throw new HttpException(
         'Username already exists',
         HttpStatus.BAD_REQUEST,

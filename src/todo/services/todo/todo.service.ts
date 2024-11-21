@@ -4,16 +4,18 @@ import { CreateTodoDto } from 'src/dto/createtodo.dto';
 import { UpdateTodoDto } from 'src/dto/updatetodo.dto';
 import { Todo } from 'src/type-orm/entities/todo.entity';
 import { User } from 'src/type-orm/entities/user.entity';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 
 @Injectable()
 export class TodoService {
   constructor(
     @InjectRepository(Todo) private todoRepository: Repository<Todo>,
   ) {}
-  async getAllTodo() {
-    // return this.todoRepository.find({ relations: ['user'] });
-    return this.todoRepository.find();
+  async getAllTodo(userId: number) {
+    return this.todoRepository.find({
+      where: { user: { id: userId } }, // Truy vấn dựa trên quan hệ user
+      relations: ['user'], // Bao gồm quan hệ với bảng user
+    });
   }
 
   async createTodo(user: User, createTodo: CreateTodoDto) {
@@ -46,5 +48,15 @@ export class TodoService {
     }
 
     return await this.todoRepository.remove(todo);
+  }
+
+  async searchTodos(userId: number, search: string) {
+    console.log(search);
+    return this.todoRepository.find({
+      where: {
+        user: { id: userId },
+        item: Like(`%${search}%`),
+      },
+    });
   }
 }
